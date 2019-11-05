@@ -41,5 +41,33 @@ router.findOne = (req, res) => {
     });
 }
 
+router.addMessage = (req, res) => {
+
+    res.setHeader('Content-Type', 'application/json');
+
+    var message = new Message();
+
+    message.messageid = req.body.messageid;
+    message.usersid = req.body.usersid;
+    message.messages = req.body.messages;
+
+    message.save(function(err) {
+        if (err)
+            res.json({ message: 'Message NOT Added!', errmsg : err } );
+        else
+            res.json({ message: 'Message Successfully Added!', data: message });
+    });
+}
+
+router.deleteMessage = (req, res) => {
+
+    Message.findByIdAndRemove({"messageid": req.params.id}, function (err) {
+        if (err)
+            res.json({message: "Message NOT DELETED"});
+        else
+            res.json({message: "Message Successfully Deleted!"});
+    });
+};
+
 
 module.exports = router;

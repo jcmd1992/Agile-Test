@@ -25,7 +25,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // My custom Web App Routes
 app.get("/messages", messages.findAll);
 app.get("/messages/:id", messages.findOne);
-
+app.post('/messages',messages.addMessage);
+app.delete('/messages/:id', messages.deleteMessage);
 
 
 // catch 404 and forward to error handler

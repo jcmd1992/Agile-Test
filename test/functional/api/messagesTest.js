@@ -86,4 +86,58 @@ describe("Messagess", () => {
             });
         });
     });
+    describe("POST /messages", () => {
+        it("should return confirmation message and update datastore", () => {
+            const message = {
+                messageid: 3,
+                usersid: 3,
+                messages: "Good Evening",
+            };
+            return request(server)
+                .post("/messages")
+                .send(message)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.message).equals("Message Successfully Added!");
+                });
+        });
+        after(() => {
+            return request(server)
+                .get("/messages")
+                .expect(200)
+                .then(res => {
+                    expect(res.body[2]).to.have.property("messageid", 3);
+                    expect(res.body[2]).to.have.property("usersid", 3);
+                    expect(res.body[2]).to.have.property("messages", "Good Evening");
+                });
+        });
+    });
+    describe("DELETE /messages/:id", () => {
+        describe("when the id is valid", () => {
+            it("should DELETE the selected message", done => {
+                request(server)
+                    .delete(`/messages/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body.message).equals("Message NOT DELETED");
+                        done(err);
+                    });
+            });
+        });
+        describe("when the id is invalid", () => {
+            it("should return the NOT found message", done => {
+                request(server)
+                    .delete("/messages/45786798")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body.message).equals("Message NOT DELETED");
+                        done(err);
+                    });
+            });
+        });
+    });
 });
