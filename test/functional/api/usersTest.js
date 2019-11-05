@@ -76,4 +76,46 @@ describe("Userss", () => {
                 });
         });
     });
+    /*describe("GET /users/:id", () => {
+        describe("when the id is valid", () => {
+            it("should return the matching user", done => {
+                request(server)
+                    .get(`/users/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body[0]).to.have.property("userid", 1);
+                        done(err);
+                    });
+            });
+        });
+    });*/
+
+    describe("POST /users", () => {
+        it("should return confirmation message and update datastore", () => {
+            const user = {
+                userid: 3,
+                email: "Jack@gmail.com",
+                administrator: "No",
+            };
+            return request(server)
+                .post("/users")
+                .send(user)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.message).equals("User Successfully Added!");
+                });
+        });
+        after(() => {
+            return request(server)
+                .get("/users")
+                .expect(200)
+                .then(res => {
+                    expect(res.body[2]).to.have.property("userid", 3);
+                    expect(res.body[2]).to.have.property("email", "Jack@gmail.com");
+                    expect(res.body[2]).to.have.property("administrator", "No");
+                });
+        });
+    });
 });
