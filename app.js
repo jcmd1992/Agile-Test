@@ -32,6 +32,7 @@ app.delete('/messages/:id', messages.deleteMessage);
 app.get("/users", users.findAll);
 //app.get("/users/:id", users.findOne);
 app.post('/users',users.addUser);
+app.delete('/users/:id', users.deleteUser);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

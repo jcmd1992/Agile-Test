@@ -58,4 +58,14 @@ router.addUser = (req, res) => {
             res.json({ message: 'User Successfully Added!', data: user });
     });
 }
+
+router.deleteUser = (req, res) => {
+
+    User.findByIdAndRemove({"userid": req.params.id}, function (err) {
+        if (err)
+            res.json({message: "User NOT DELETED"});
+        else
+            res.json({message: "User Successfully Deleted!"});
+    });
+};
 module.exports = router;

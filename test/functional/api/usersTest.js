@@ -118,4 +118,32 @@ describe("Userss", () => {
                 });
         });
     });
+    describe("DELETE /users/:id", () => {
+        describe("when the id is valid", () => {
+            it("should DELETE the selected user", done => {
+                request(server)
+                    .delete(`/users/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body.message).equals("User NOT DELETED");
+                        done(err);
+                    });
+            });
+        });
+        describe("when the id is invalid", () => {
+            it("should return the NOT found user", done => {
+                request(server)
+                    .delete("/users/45786798")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body.message).equals("User NOT DELETED");
+                        done(err);
+                    });
+            });
+        });
+    });
 });
