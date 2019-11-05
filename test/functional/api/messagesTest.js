@@ -1,41 +1,46 @@
-const expect = require("chai").expect;
+const chai = require("chai");
+const expect = chai.expect;
 const request = require("supertest");
-const {MongoMemoryServer} = require("mongodb-memory-server");
+const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer;
 const Message = require("../../../models/messages");
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 
-let server;
-let mongod;
-let db, validID;
+const _ = require("lodash");
 
+let server, mongod, url, db, connection, collection, validID;
 
 describe("Messagess", () => {
-    before(async () => {
-        try {
-            mongod = new MongoMemoryServer();
-            // Async Trick - this ensures the database is created before
-            // we try to connect to it or start the server
-            const connString = await mongod.getConnectionString();
-
-            await mongoose.connect(connString, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
-            server = require("../../../bin/www");
-            db = mongoose.connection;
-        } catch (error) {
-            console.log(error);
+  before(async () => {
+    try {
+      mongod = new MongoMemoryServer({
+        instance: {
+          port: 27017,
+          dbPath: "./test/database",
+          dbName: "pearlhatbordb" // by default generate random dbName
         }
-    });
+      });
+      url = await mongod.getConnectionString();
+      connection = await MongoClient.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+      db = connection.db(await mongod.getDbName());
+      collection = db.collection("messages");
+      // Must wait for DB setup to complete BEFORE starting the API server
+      server = require("../../../bin/www");
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
-    after(async () => {
-        try {
-            await db.dropDatabase();
-            await mongod.stop();
-        } catch (error) {
-            console.log(error);
-        }
-    });
+  after(async () => {
+    try {
+      await connection.close();
+      await mongod.stop();
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
     beforeEach(async () => {
         try {

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=dev PORT=3001 node dist/bin/www",
-    "test": "cross-env NODE_ENV=test mocha --exit",
-    "lint": "esw  ./test ./routes ./models/ app.js bin/www ",
-    "lint:fix": "npm run lint -- --fix",
-    "lint:watch": "npm run lint -- --watch"
+    "test": "cross-env NODE_ENV=test mocha test/functional/api/*.js",
+    "build": "npm-run-all test clean compile start",
+    "compile": "babel ./ --out-dir dist/ --ignore ./node_modules,./test --copy-files",
+    "clean": "rimraf ./dist && mkdir dist"
   },
   "dependencies": {
     "@babel/runtime": "^7.6.3",

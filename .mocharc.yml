@@ -1,4 +1,5 @@
 file:
   - test/functional/api/messagesTest.js
+  - test/functional/api/usersTest.js
 require: '@babel/register'
 timeout: 10000

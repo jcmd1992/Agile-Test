@@ -6,6 +6,7 @@ var logger = require("morgan");
 
 
 const messages = require("./routes/messages");
+const users = require("./routes/users");
 
 
 
@@ -28,7 +29,7 @@ app.get("/messages/:id", messages.findOne);
 app.post('/messages',messages.addMessage);
 app.delete('/messages/:id', messages.deleteMessage);
 
-
+app.get("/users", users.findAll);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
