@@ -100,3 +100,4 @@ continuous_deployment:
   script:  
     - dpl --provider=heroku --app=$HEROKU_APP_NAME_PROD --api-key=$HEROKU_API_KEY
     - echo "Deployed to production server"
+    
