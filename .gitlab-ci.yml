@@ -82,11 +82,9 @@ coverage:
           - coverage/
 pages:
   stage: deploy
-  dependencies:
-    - coverage
   script:
-    - mv coverage public
+    - echo "Publish website"
   artifacts:
     paths:
       - public
-    expire_in: 30 days       
+    expire_in: 30 days
