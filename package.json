@@ -17,6 +17,7 @@
     "start:prod": "cross-env NODE_ENV=dev node dist/bin/www",
     "start:watch": "cross-env NODE_ENV=dev nodemon --exec babel-node bin/www",
     "prebuild:dev": "npm-run-all test clean",
+    "postinstall": "rimraf ./dist && npm run compile:all",
     "build:dev": "npm run compile",
     "postbuild:dev": "npm run start:prod",
     "build:release": "npm-run-all  test clean compile ",
