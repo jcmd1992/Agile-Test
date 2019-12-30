@@ -2,9 +2,10 @@ let Message = require("../models/messages");
 let express = require("express");
 let router = express.Router();
 let mongoose = require("mongoose");
+const dotenv = require("dotenv")
+dotenv.config()
 
-
-const connectionString = "mongodb://localhost:27017/pearlharbordb";
+const connectionString = process.env.MONGO_URI;
 mongoose.connect(connectionString);
 
 let db = mongoose.connection;
