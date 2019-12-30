@@ -58,6 +58,7 @@ deploy_staging:
   image: ruby:latest
   only:
     - develop
+    - master
   stage: deploy
   before_script:
     - apt-get update -qy
@@ -65,7 +66,8 @@ deploy_staging:
     - gem install dpl
   script:  
     - dpl --provider=heroku --app=$HEROKU_APP_NAME_STAGING --api-key=$HEROKU_API_KEY
-    - echo "Deployed to staging server" 
+    - echo "Deployed to staging server"
+
 continuous_delivery:
   image: ruby:latest
   dependencies:
@@ -78,6 +80,7 @@ continuous_delivery:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:  
-    - dpl --provider=heroku --app=$pearlharbor-cicd-prod --api-key=67e35b0b-57f7-4519-85f1-d6aa273ab317
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME_PROD --api-key=$HEROKU_API_KEY
     - echo "Deployed to production server"
-  when: manual       
+  when: manual
+ 
