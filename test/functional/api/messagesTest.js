@@ -1,46 +1,29 @@
-const chai = require("chai");
-const expect = chai.expect;
-const request = require("supertest");
-const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer;
-const Message = require("../../../models/messages");
-const { MongoClient } = require("mongodb");
+const chai = require("chai")
+const expect = chai.expect
+const request = require("supertest")
+const mongoose = require("mongoose")
+const dotenv = require("dotenv")
+dotenv.config()
+const Message = require("../../../models/messages")
 
-const _ = require("lodash");
+const _ = require("lodash")
 
-let server, mongod, url, db, connection, collection, validID;
+let server, db, validID
 
 describe("Messagess", () => {
-  before(async () => {
-    try {
-      mongod = new MongoMemoryServer({
-        instance: {
-          port: 27017,
-          dbPath: "./test/database",
-          dbName: "pearlhatbordb" // by default generate random dbName
+    before(async () => {
+        try {
+            // eslint-disable-next-line no-undef
+            await mongoose.connect(process.env.MONGO_URI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            })
+            server = require("../../../bin/www")
+            db = mongoose.connection
+        } catch (error) {
+            console.log(error)
         }
-      });
-      url = await mongod.getConnectionString();
-      connection = await MongoClient.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
-      db = connection.db(await mongod.getDbName());
-      collection = db.collection("messages");
-      // Must wait for DB setup to complete BEFORE starting the API server
-      server = require("../../../bin/www");
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  after(async () => {
-    try {
-      await connection.close();
-      await mongod.stop();
-    } catch (error) {
-      console.log(error);
-    }
-  });
+    })
 
     beforeEach(async () => {
         try {
