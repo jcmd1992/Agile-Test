@@ -15,7 +15,7 @@ variables:
 stages:
   - install
   - build
-  - deploy
+  
 
 
 # Jobs:
@@ -53,6 +53,7 @@ variables:
 stages:
   - install
   - build
+  - deploy
 
 # Jobs:
 
