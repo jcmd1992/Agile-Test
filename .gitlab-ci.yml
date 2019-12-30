@@ -78,6 +78,6 @@ continuous_delivery:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:  
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME_PROD --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=$pearlharbor-cicd-prod --api-key=67e35b0b-57f7-4519-85f1-d6aa273ab317
     - echo "Deployed to production server"
   when: manual       
